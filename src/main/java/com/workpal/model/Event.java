@@ -13,8 +13,8 @@ public class Event {
     private int places_num;
     private int manager_id;
 
-    public Event(int id, String name, String description, String location, Date date, String type, String policies, int places_num, int manager_id) {
-        this.id = id;
+    public Event(String name, String description, String location, java.sql.Date date,
+                 String type, String policies, int places_num, int manager_id, int id) {
         this.name = name;
         this.description = description;
         this.location = location;
@@ -23,6 +23,7 @@ public class Event {
         this.policies = policies;
         this.places_num = places_num;
         this.manager_id = manager_id;
+        this.id = id;
     }
 
     public int getId() {
