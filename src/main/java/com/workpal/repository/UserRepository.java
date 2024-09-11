@@ -1,5 +1,6 @@
 package com.workpal.repository;
 
+import com.workpal.interfaces.UserInterface;
 import com.workpal.model.User;
 import com.workpal.util.JdcbConnection;
 
@@ -8,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserRepository {
+public class UserRepository implements UserInterface {
 
     public void saveUser(User user) throws SQLException {
         Connection connection = JdcbConnection.getConnection();
@@ -26,15 +27,19 @@ public class UserRepository {
             int userId = rs.getInt(1);
 
             String roleQuery = switch (user.getRole().toLowerCase()) {
-                case "admin" -> "INSERT INTO admins (user_id) VALUES (?)";
-                case "manager" -> "INSERT INTO managers (user_id) VALUES (?)";
-                case "member" -> "INSERT INTO members (user_id) VALUES (?)";
+                case "manager" -> "INSERT INTO managers (name, email, password, address, phone, user_id, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                case "member" -> "INSERT INTO members (name, email, password, address, phone, user_id, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 default -> throw new SQLException("Invalid role");
             };
-
-            PreparedStatement roleStatement = connection.prepareStatement(roleQuery);
-            roleStatement.setInt(1, userId);
-            roleStatement.executeUpdate();
+            PreparedStatement statementTow = connection.prepareStatement(roleQuery, PreparedStatement.RETURN_GENERATED_KEYS);
+            statementTow.setString(1, user.getName());
+            statementTow.setString(2, user.getEmail());
+            statementTow.setString(3, user.getPassword());
+            statementTow.setString(4, user.getAddress());
+            statementTow.setString(5, user.getPhone());
+            statementTow.setInt(6, userId);
+            statementTow.setString(7, user.getRole());
+            statementTow.executeUpdate();
         }
     }
 
@@ -59,8 +64,8 @@ public class UserRepository {
         return null;
     }
 
-    private String getUserRole(int userId, Connection connection) throws SQLException {
-        String roleQuery = "SELECT 'admin' AS role FROM admins WHERE user_id = ? " +
+    public String getUserRole(int userId, Connection connection) throws SQLException {
+        String roleQuery = "SELECT 'admin' AS role FROM admin WHERE user_id = ? " +
                 "UNION ALL SELECT 'manager' FROM managers WHERE user_id = ? " +
                 "UNION ALL SELECT 'member' FROM members WHERE user_id = ?";
 
