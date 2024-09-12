@@ -80,4 +80,25 @@ public class SpaceRepository implements SpaceInterface {
             return affectedRows > 0;
         }
     }
+
+    public Space getSpace(int id) throws SQLException {
+        Connection connection = JdcbConnection.getConnection();
+        String sql = "SELECT * FROM spaces WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new Space(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getString("policies"),
+                        rs.getInt("manager_id"),
+                        rs.getString("type")
+                );
+            }
+        }
+        return null;
+    }
 }

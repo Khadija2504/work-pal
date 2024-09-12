@@ -10,5 +10,6 @@ public interface SpaceInterface {
     List<Space> getAllSpaces() throws SQLException;
     boolean updateSpace(Space space) throws SQLException;
     boolean deleteSpace(int id) throws SQLException;
+    Space getSpace(int id) throws SQLException;
 }
 

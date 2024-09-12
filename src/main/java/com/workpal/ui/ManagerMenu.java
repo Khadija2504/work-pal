@@ -1,13 +1,7 @@
 package com.workpal.ui;
 
-import com.workpal.model.Event;
-import com.workpal.model.Space;
-import com.workpal.model.Subscription;
-import com.workpal.model.User;
-import com.workpal.service.EventService;
-import com.workpal.service.SessionManager;
-import com.workpal.service.SpaceService;
-import com.workpal.service.SubscriptionService;
+import com.workpal.model.*;
+import com.workpal.service.*;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -21,6 +15,7 @@ public class ManagerMenu {
     SpaceService spaceService = new SpaceService();
     EventService eventService = new EventService();
     SubscriptionService subscriptionService = new SubscriptionService();
+    EquipmentService equipmentService = new EquipmentService();
     public void managerMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to WorkPal");
@@ -29,7 +24,7 @@ public class ManagerMenu {
             System.out.println("2. Manage reservation");
             System.out.println("3. Manage subscription");
             System.out.println("4. Manage events");
-            System.out.println("5. View all spaces");
+            System.out.println("5. Manage equipments");
             System.out.println("6. View my notifications");
             System.out.println("8. Search");
             System.out.println("9. Exit");
@@ -45,6 +40,9 @@ public class ManagerMenu {
                     break;
                 case 4:
                     eventsManagement();
+                    break;
+                case 5:
+                    equipmentManagement();
                     break;
                 case 8:
                     break;
@@ -133,6 +131,35 @@ public class ManagerMenu {
                     break;
                 case 4:
                     displayAllSubs();
+                    break;
+                case 5:
+                    return;
+            }
+        }
+    }
+
+    public void equipmentManagement() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Equipments management");
+        while (true) {
+            System.out.println("1. Add a new equipment");
+            System.out.println("2. Update an equipment");
+            System.out.println("3. Delete an equipment");
+            System.out.println("4. View all equipments");
+            System.out.println("5. Exit");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    addEquipment();
+                    break;
+                case 2:
+                    updateEquipment();
+                    break;
+                case 3:
+                    deleteEquipment();
+                    break;
+                case 4:
+                    displayALlEquipments();
                     break;
                 case 5:
                     return;
@@ -242,6 +269,35 @@ public class ManagerMenu {
 
     }
 
+    public void addEquipment() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter equipment name");
+        String name = scanner.nextLine();
+        System.out.println("Enter space id from the list");
+        displayAllSpaces();
+        int spaceId = Integer.parseInt(scanner.nextLine());
+        User loggedInUser = SessionManager.getLoggedInUser();
+
+        if (loggedInUser != null) {
+            int manager_id = loggedInUser.getId();
+            System.out.println(manager_id);
+
+            try {
+                boolean isAdded = equipmentService.addEquipment(name, spaceId, manager_id);
+                if (isAdded) {
+                    System.out.println("Equipment " + name + " added successfully!");
+                } else {
+                    System.out.println("Invalid format data");
+                }
+            } catch (SQLException e) {
+                System.out.println("Error during addition of the equipment: " + e.getMessage());
+            }
+        } else {
+            System.out.println("No user is currently logged in.");
+        }
+
+    }
+
     public void displayAllSpaces() {
         try {
             List<Space> spaces = spaceService.getAllSpaces();
@@ -271,6 +327,26 @@ public class ManagerMenu {
             });
         } catch (SQLException e) {
             System.out.println("Error fetching subs: " + e.getMessage());
+        }
+    }
+
+    public void displayALlEquipments() {
+        try {
+            List<Equipment> equipments = equipmentService.getAllEquipments();
+            equipments.forEach(equipment -> {
+                System.out.println("Space ID: " + equipment.getId());
+                System.out.println("Name: " + equipment.getName());
+                try {
+                    Space space = spaceService.getSpace(equipment.getSpace_id());
+                    System.out.println("Space name: " + space.getName());
+                    System.out.println("Space type: " + space.getType());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.println("------------");
+            });
+        } catch (SQLException e) {
+            System.out.println("Error fetching equipments: " + e.getMessage());
         }
     }
 
@@ -451,4 +527,55 @@ public class ManagerMenu {
             }
         }
     }
+
+    public void updateEquipment() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("choice an equipment ID from the list");
+        displayALlEquipments();
+        int equipmentId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Edit an Equipment");
+        System.out.println("Enter new equipment name");
+        String name = scanner.nextLine();
+        System.out.println("Enter space id from the list");
+        displayAllSpaces();
+        int space_id = Integer.parseInt(scanner.nextLine());
+
+        User loggedInUser = SessionManager.getLoggedInUser();
+
+        if (loggedInUser != null) {
+            int manager_id = loggedInUser.getId();
+
+            try {
+                Equipment equipment = new Equipment(equipmentId, name, space_id, manager_id);
+                boolean isUpdated = equipmentService.updateEquipment(equipment);
+                if (isUpdated) {
+                    System.out.println("equipment updated successfully!");
+                } else {
+                    System.out.println("Error updating equipment.");
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Error during updating the equipment " + e.getMessage());
+            }
+        }
+        
+    }
+    public void deleteEquipment() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter equipment id to delete from the list");
+        displayALlEquipments();
+        int equipment_id = scanner.nextInt();
+        try {
+            boolean isDeleted = equipmentService.deleteEquipment(equipment_id);
+            if (isDeleted)  {
+                System.out.println("equipment deleted successfully!");
+            } else {
+                System.out.println("Error deleting equipment.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error during deleting the equipment: " + e.getMessage());
+        }
+    }
+
 }

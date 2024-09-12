@@ -24,4 +24,8 @@ public class SpaceService {
     public boolean deleteSpace(int id) throws SQLException {
         return spaceRepository.deleteSpace(id);
     }
+
+    public Space getSpace(int id) throws SQLException {
+        return spaceRepository.getSpace(id);
+    }
 }
