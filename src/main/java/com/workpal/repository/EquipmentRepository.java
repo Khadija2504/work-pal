@@ -4,7 +4,7 @@ import com.workpal.interfaces.EquipmentInterface;
 import com.workpal.model.Equipment;
 import com.workpal.model.Event;
 import com.workpal.model.User;
-import com.workpal.service.SessionManager;
+import com.workpal.service.SessionUser;
 import com.workpal.util.JdcbConnection;
 
 import java.sql.Connection;
@@ -29,7 +29,7 @@ public class EquipmentRepository implements EquipmentInterface {
     @Override
     public List<Equipment> getAllEquipments() throws SQLException {
         Connection connection = JdcbConnection.getConnection();
-        User loggedInUser = SessionManager.getLoggedInUser();
+        User loggedInUser = SessionUser.getLoggedInUser();
         String sql = "SELECT * FROM equipments WHERE manager_id = ?";
         List<Equipment> equipments = new ArrayList<>();
 

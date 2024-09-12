@@ -4,7 +4,7 @@ import com.workpal.interfaces.EventInterface;
 import com.workpal.model.Event;
 import com.workpal.model.Space;
 import com.workpal.model.User;
-import com.workpal.service.SessionManager;
+import com.workpal.service.SessionUser;
 import com.workpal.util.JdcbConnection;
 
 import java.sql.Connection;
@@ -34,7 +34,7 @@ public class EventRepository implements EventInterface {
     @Override
     public List<Event> getAllEvents() throws SQLException {
         Connection connection = JdcbConnection.getConnection();
-        User loggedInUser = SessionManager.getLoggedInUser();
+        User loggedInUser = SessionUser.getLoggedInUser();
         String sql = "SELECT * FROM events WHERE manager_id = ?";
         List<Event> events = new ArrayList<>();
 

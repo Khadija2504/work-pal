@@ -2,7 +2,7 @@ package com.workpal.service;
 
 import com.workpal.model.User;
 
-public class SessionManager {
+public class SessionUser {
         private static User loggedInUser;
 
         public static void setLoggedInUser(User user) {

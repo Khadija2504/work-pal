@@ -16,6 +16,7 @@ public class ManagerMenu {
     EventService eventService = new EventService();
     SubscriptionService subscriptionService = new SubscriptionService();
     EquipmentService equipmentService = new EquipmentService();
+    ServiceService serviceService = new ServiceService();
     public void managerMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to WorkPal");
@@ -25,6 +26,7 @@ public class ManagerMenu {
             System.out.println("3. Manage subscription");
             System.out.println("4. Manage events");
             System.out.println("5. Manage equipments");
+            System.out.println("6. Manage services");
             System.out.println("6. View my notifications");
             System.out.println("8. Search");
             System.out.println("9. Exit");
@@ -43,6 +45,9 @@ public class ManagerMenu {
                     break;
                 case 5:
                     equipmentManagement();
+                    break;
+                case 6:
+                    servicesManagement();
                     break;
                 case 8:
                     break;
@@ -73,6 +78,35 @@ public class ManagerMenu {
                     break;
                 case 4:
                     displayAllSpaces();
+                    break;
+                case 5:
+                    return;
+            }
+        }
+    }
+
+    public void servicesManagement() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Services management");
+        while (true) {
+            System.out.println("1. Add a new service");
+            System.out.println("2. Update a service");
+            System.out.println("3. Delete a service");
+            System.out.println("4. View all services");
+            System.out.println("5. Exit");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    addService();
+                    break;
+                case 2:
+                    updateService();
+                    break;
+                case 3:
+                    deleteService();
+                    break;
+                case 4:
+                    displayAllServices();
                     break;
                 case 5:
                     return;
@@ -177,7 +211,7 @@ public class ManagerMenu {
         String type = scanner.nextLine();
         System.out.println("Enter subscription price");
         int price = Integer.parseInt(scanner.nextLine());
-        User loggedInUser = SessionManager.getLoggedInUser();
+        User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int manager_id = loggedInUser.getId();
@@ -207,7 +241,7 @@ public class ManagerMenu {
         String policies = scanner.nextLine();
         System.out.println("Enter space type (office, meeting_room)");
         String type = scanner.nextLine();
-        User loggedInUser = SessionManager.getLoggedInUser();
+        User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int managerId = loggedInUser.getId();
@@ -244,7 +278,7 @@ public class ManagerMenu {
         int places_num = Integer.parseInt(scanner.nextLine());
         System.out.println("Enter event location");
         String location = scanner.nextLine();
-        User loggedInUser = SessionManager.getLoggedInUser();
+        User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int manager_id = loggedInUser.getId();
@@ -276,7 +310,7 @@ public class ManagerMenu {
         System.out.println("Enter space id from the list");
         displayAllSpaces();
         int spaceId = Integer.parseInt(scanner.nextLine());
-        User loggedInUser = SessionManager.getLoggedInUser();
+        User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int manager_id = loggedInUser.getId();
@@ -463,7 +497,7 @@ public class ManagerMenu {
         System.out.println("Enter new subscription description");
         String description = scanner.nextLine();
 
-        User loggedInUser = SessionManager.getLoggedInUser();
+        User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int manager_id = loggedInUser.getId();
@@ -505,7 +539,7 @@ public class ManagerMenu {
         System.out.println("Enter new event description");
         String description = scanner.nextLine();
 
-        User loggedInUser = SessionManager.getLoggedInUser();
+        User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int manager_id = loggedInUser.getId();
@@ -541,7 +575,7 @@ public class ManagerMenu {
         displayAllSpaces();
         int space_id = Integer.parseInt(scanner.nextLine());
 
-        User loggedInUser = SessionManager.getLoggedInUser();
+        User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int manager_id = loggedInUser.getId();
@@ -565,9 +599,9 @@ public class ManagerMenu {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter equipment id to delete from the list");
         displayALlEquipments();
-        int equipment_id = scanner.nextInt();
+        int equipementId = scanner.nextInt();
         try {
-            boolean isDeleted = equipmentService.deleteEquipment(equipment_id);
+            boolean isDeleted = equipmentService.deleteEquipment(equipementId);
             if (isDeleted)  {
                 System.out.println("equipment deleted successfully!");
             } else {
@@ -575,6 +609,96 @@ public class ManagerMenu {
             }
         } catch (SQLException e) {
             System.out.println("Error during deleting the equipment: " + e.getMessage());
+        }
+    }
+
+    public void addService() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter event name");
+        String name = scanner.nextLine();
+        System.out.println("Enter event description");
+        String description = scanner.nextLine();
+        User loggedInUser = SessionUser.getLoggedInUser();
+
+        if (loggedInUser != null) {
+            int manager_id = loggedInUser.getId();
+
+            try {
+                boolean isAdded = serviceService.addService(name, description, manager_id);
+                if (isAdded) {
+                    System.out.println("Service " + name + " added successfully!");
+                } else {
+                    System.out.println("Invalid format data");
+                }
+            } catch (SQLException e) {
+                System.out.println("Error during addition of the service: " + e.getMessage());
+            }
+        } else {
+            System.out.println("No user is currently logged in.");
+        }
+    }
+
+    public void updateService() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("choice a service ID from the list");
+        displayAllServices();
+        int serviceId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Edit a service");
+        System.out.println("Enter new service name");
+        String name = scanner.nextLine();
+        System.out.println("Enter a service description");
+        String description = scanner.nextLine();
+
+        User loggedInUser = SessionUser.getLoggedInUser();
+
+        if (loggedInUser != null) {
+            int manager_id = loggedInUser.getId();
+
+            try {
+                Service service = new Service(serviceId, name, description, manager_id);
+                boolean isUpdated = serviceService.updateService(service);
+                if (isUpdated) {
+                    System.out.println("service updated successfully!");
+                } else {
+                    System.out.println("Error updating service");
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Error during updating the service " + e.getMessage());
+            }
+        }
+
+    }
+
+    public void displayAllServices() {
+        try {
+            List<Service> services = serviceService.getAllServices();
+            services.forEach(service -> {
+                System.out.println("service ID: " + service.getId());
+                System.out.println("Name: " + service.getName());
+                System.out.println("Description: " + service.getDescription());
+                System.out.println("------------");
+            });
+        } catch (SQLException e) {
+            System.out.println("Error fetching services: " + e.getMessage());
+        }
+    }
+
+    public void deleteService() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter service id to delete from the list");
+        displayAllServices();
+        int serviceId = scanner.nextInt();
+        try {
+            boolean isDeleted = serviceService.deleteService(serviceId);
+            if (isDeleted)  {
+                System.out.println("service deleted successfully!");
+            } else {
+                System.out.println("Error deleting service.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error during deleting the service: " + e.getMessage());
         }
     }
 

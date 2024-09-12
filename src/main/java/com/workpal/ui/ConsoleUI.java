@@ -3,7 +3,7 @@ package com.workpal.ui;
 import com.workpal.model.Member;
 import com.workpal.model.User;
 import com.workpal.service.AuthService;
-import com.workpal.service.SessionManager;
+import com.workpal.service.SessionUser;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -82,7 +82,7 @@ public class ConsoleUI {
             Optional<User> user = authService.login(email, password);
             if (user.isPresent()) {
                 loggedInUser = user.get();
-                SessionManager.setLoggedInUser(loggedInUser);
+                SessionUser.setLoggedInUser(loggedInUser);
                 System.out.println("Login successful! Welcome " + loggedInUser.getName() + loggedInUser.getRole());
                 if(loggedInUser.getRole().equals("manager")) {
                     managerMenu.managerMenu();

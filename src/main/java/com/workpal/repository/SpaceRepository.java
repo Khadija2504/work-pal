@@ -3,7 +3,7 @@ package com.workpal.repository;
 import com.workpal.interfaces.SpaceInterface;
 import com.workpal.model.Space;
 import com.workpal.model.User;
-import com.workpal.service.SessionManager;
+import com.workpal.service.SessionUser;
 import com.workpal.util.JdcbConnection;
 
 import java.sql.Connection;
@@ -29,7 +29,7 @@ public class SpaceRepository implements SpaceInterface {
     }
     public List<Space> getAllSpaces() throws SQLException {
         Connection connection = JdcbConnection.getConnection();
-        User loggedInUser = SessionManager.getLoggedInUser();
+        User loggedInUser = SessionUser.getLoggedInUser();
         String sql = "SELECT * FROM spaces WHERE manager_id = ?";
         List<Space> spaces = new ArrayList<>();
 

@@ -1,8 +1,8 @@
 package com.workpal.repository;
 
-import com.workpal.interfaces.SubscriptionInterface;
+import com.workpal.interfaces.ServiceInterface;
 import com.workpal.model.Event;
-import com.workpal.model.Subscription;
+import com.workpal.model.Service;
 import com.workpal.model.User;
 import com.workpal.service.SessionUser;
 import com.workpal.util.JdcbConnection;
@@ -14,69 +14,62 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubscriptionRepository implements SubscriptionInterface {
+public class ServiceRepository implements ServiceInterface {
     @Override
-    public void saveSubscription(Subscription subs) throws SQLException {
+    public void saveService(Service service) throws SQLException {
         Connection connection = JdcbConnection.getConnection();
-        String query = "INSERT INTO subscriptions (name, description, type, price, manager_id) VALUES ( ?, ?, ?, ?, ?) ";
+        String query = "INSERT INTO services (name, description, manager_id) VALUES (?, ?, ?) ";
         PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-        statement.setString(1, subs.getName());
-        statement.setString(2, subs.getDescription());
-        statement.setString(3, subs.getType());
-        statement.setInt(4, subs.getPrice());
-        statement.setInt(5, subs.getManager_id());
+        statement.setString(1, service.getName());
+        statement.setString(2, service.getDescription());
+        statement.setInt(3, service.getManager_id());
         statement.executeUpdate();
     }
 
     @Override
-    public List<Subscription> getAllSubscriptions() throws SQLException {
+    public List<Service> getAllServices() throws SQLException {
         Connection connection = JdcbConnection.getConnection();
         User loggedInUser = SessionUser.getLoggedInUser();
-        String sql = "SELECT * FROM subscriptions WHERE manager_id = ?";
-        List<Subscription> subs = new ArrayList<>();
+        String sql = "SELECT * FROM services WHERE manager_id = ?";
+        List<Service> services = new ArrayList<>();
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, loggedInUser.getId());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    subs.add(new Subscription(
+                    services.add(new Service(
                             rs.getInt("id"),
                             rs.getString("name"),
                             rs.getString("description"),
-                            rs.getString("type"),
-                            rs.getInt("price"),
                             rs.getInt("manager_id")
                     ));
                 }
             }
         } catch (SQLException e) {
-            throw new SQLException("Error fetching subscriptions", e);
+            throw new SQLException("Error fetching services", e);
         }
 
-        return subs;
+        return services;
     }
 
     @Override
-    public boolean updateSubscription(Subscription subs) throws SQLException {
+    public boolean updateService(Service service) throws SQLException {
         Connection connection = JdcbConnection.getConnection();
-        String sql = "UPDATE subscriptions SET name = ?, description = ?, type = ?, price = ? WHERE id = ?";
+        String sql = "UPDATE services SET name = ?, description = ? WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, subs.getName());
-            pstmt.setString(2, subs.getDescription());
-            pstmt.setString(3, subs.getType());
-            pstmt.setInt(4, subs.getPrice());
-            pstmt.setInt(5, subs.getId());
-
+            pstmt.setString(1, service.getName());
+            pstmt.setString(2, service.getDescription());
+            pstmt.setInt(3, service.getId());
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
         }
     }
 
     @Override
-    public boolean deleteSubscription(int id) throws SQLException {
+    public boolean deleteService(int id) throws SQLException {
         Connection connection = JdcbConnection.getConnection();
-        String sql = "DELETE FROM subscriptions WHERE id = ?";
+        String sql = "DELETE FROM services WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, id);
 
