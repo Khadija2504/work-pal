@@ -1,6 +1,6 @@
-package com.workpal.repository;
+package com.workpal.repository.implementInterfaces;
 
-import com.workpal.interfaces.SpaceInterface;
+import com.workpal.repository.interfaces.SpaceInterface;
 import com.workpal.model.Space;
 import com.workpal.model.User;
 import com.workpal.service.SessionUser;
@@ -10,8 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 

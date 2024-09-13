@@ -5,7 +5,6 @@ import com.workpal.service.*;
 
 import java.sql.Date;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -48,8 +47,6 @@ public class ManagerMenu {
                     break;
                 case 6:
                     servicesManagement();
-                    break;
-                case 8:
                     break;
                 case 9:
                     return;
@@ -211,13 +208,16 @@ public class ManagerMenu {
         String type = scanner.nextLine();
         System.out.println("Enter subscription price");
         int price = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter a service id from the list");
+        displayAllServices();
+        int service_id = scanner.nextInt();
         User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int manager_id = loggedInUser.getId();
 
             try {
-                boolean isAdded = subscriptionService.addSubscription(name, description, type, price, manager_id);
+                boolean isAdded = subscriptionService.addSubscription(name, description, type, price, manager_id, service_id);
                 if (isAdded) {
                     System.out.println("Subscription " + name + " added successfully!");
                 } else {
@@ -351,18 +351,34 @@ public class ManagerMenu {
     public void displayAllSubs() {
         try {
             List<Subscription> subscriptions = subscriptionService.getAllSubscriptions();
-            subscriptions.forEach(space -> {
-                System.out.println("Space ID: " + space.getId());
-                System.out.println("Name: " + space.getName());
-                System.out.println("Description: " + space.getDescription());
-                System.out.println("Type: " + space.getType());
-                System.out.println("price: " + space.getPrice() + "$");
+
+            subscriptions.forEach(subscription -> {
+                System.out.println("Subscription ID: " + subscription.getId());
+                System.out.println("Name: " + subscription.getName());
+                System.out.println("Description: " + subscription.getDescription());
+                System.out.println("Type: " + subscription.getType());
+                System.out.println("Price: " + subscription.getPrice() + "$");
+
+                System.out.println("Services:");
+                List<Service> services = subscription.getServices();
+                if (services.isEmpty()) {
+                    System.out.println("  No services associated with this subscription.");
+                } else {
+                    services.forEach(service -> {
+                        System.out.println("  Service ID: " + service.getId());
+                        System.out.println("  Service Name: " + service.getName());
+                        System.out.println("  Service Description: " + service.getDescription());
+                        System.out.println("  --------");
+                    });
+                }
+
                 System.out.println("------------");
             });
         } catch (SQLException e) {
-            System.out.println("Error fetching subs: " + e.getMessage());
+            System.out.println("Error fetching subscriptions: " + e.getMessage());
         }
     }
+
 
     public void displayALlEquipments() {
         try {

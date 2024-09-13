@@ -1,7 +1,7 @@
 package com.workpal.service;
 
 import com.workpal.model.Event;
-import com.workpal.repository.EventRepository;
+import com.workpal.repository.implementInterfaces.EventRepository;
 
 import java.sql.Date;
 import java.sql.SQLException;

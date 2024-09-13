@@ -1,4 +1,4 @@
-package com.workpal.interfaces;
+package com.workpal.repository.interfaces;
 
 import com.workpal.model.Space;
 

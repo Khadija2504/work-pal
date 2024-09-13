@@ -1,13 +1,13 @@
 package com.workpal.service;
 
 import com.workpal.model.User;
-import com.workpal.repository.UserRepository;
+import com.workpal.repository.implementInterfaces.UserRepository;
 
 import java.sql.SQLException;
 import java.util.Optional;
 
 public class AuthService {
-    private UserRepository userRepository = new UserRepository();
+    private com.workpal.repository.implementInterfaces.UserRepository userRepository = new UserRepository();
 
     public boolean register(String name, String email, String password, String address, String phone, String role) throws SQLException {
         User existingUser = userRepository.getUserByEmail(email);

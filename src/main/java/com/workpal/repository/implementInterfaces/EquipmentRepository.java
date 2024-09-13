@@ -1,8 +1,7 @@
-package com.workpal.repository;
+package com.workpal.repository.implementInterfaces;
 
-import com.workpal.interfaces.EquipmentInterface;
+import com.workpal.repository.interfaces.EquipmentInterface;
 import com.workpal.model.Equipment;
-import com.workpal.model.Event;
 import com.workpal.model.User;
 import com.workpal.service.SessionUser;
 import com.workpal.util.JdcbConnection;

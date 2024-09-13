@@ -1,10 +1,8 @@
 package com.workpal.service;
 
 import com.workpal.model.Equipment;
-import com.workpal.model.Event;
-import com.workpal.repository.EquipmentRepository;
+import com.workpal.repository.implementInterfaces.EquipmentRepository;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 

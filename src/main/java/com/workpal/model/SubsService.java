@@ -6,7 +6,7 @@ public class SubsService {
     private int manager_id;
     private int subs_id;
 
-    public SubsService(int id, int service_id, int manager_id, int subs_id) {
+    public SubsService(int id, int service_id, int manager_id) {
         this.id = id;
         this.service_id = service_id;
         this.manager_id = manager_id;

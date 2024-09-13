@@ -1,12 +1,13 @@
 package com.workpal.model;
 
-public class Service {
+public class Service extends SubsService {
     private int id;
     private String name;
     private String description;
     private int manager_id;
 
     public Service(int id, String name, String description, int manager_id) {
+        super(id, id, manager_id);
         this.id = id;
         this.name = name;
         this.description = description;

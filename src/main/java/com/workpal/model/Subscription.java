@@ -1,5 +1,8 @@
 package com.workpal.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Subscription {
     private int id;
     private String name;
@@ -7,6 +10,7 @@ public class Subscription {
     private String type;
     private int price;
     private int manager_id;
+    private List<Service> services;
 
     public Subscription(int id, String name, String description, String type, int price, int manager_id) {
         this.id = id;
@@ -15,6 +19,7 @@ public class Subscription {
         this.type = type;
         this.price = price;
         this.manager_id = manager_id;
+        this.services = new ArrayList<>();
     }
     public int getId() {
         return id;
@@ -51,5 +56,12 @@ public class Subscription {
     }
     public void setManager_id(int manager_id) {
         this.manager_id = manager_id;
+    }
+    public List<Service> getServices() {
+        return services;
+    }
+
+    public void addService(Service service) {
+        this.services.add(service);
     }
 }

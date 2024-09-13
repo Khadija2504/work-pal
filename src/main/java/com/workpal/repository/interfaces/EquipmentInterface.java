@@ -1,7 +1,6 @@
-package com.workpal.interfaces;
+package com.workpal.repository.interfaces;
 
 import com.workpal.model.Equipment;
-import com.workpal.model.Event;
 
 import java.sql.SQLException;
 import java.util.List;

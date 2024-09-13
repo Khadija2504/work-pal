@@ -1,8 +1,7 @@
 package com.workpal.service;
 
 import com.workpal.model.Space;
-import com.workpal.model.User;
-import com.workpal.repository.SpaceRepository;
+import com.workpal.repository.implementInterfaces.SpaceRepository;
 
 import java.sql.SQLException;
 import java.util.List;

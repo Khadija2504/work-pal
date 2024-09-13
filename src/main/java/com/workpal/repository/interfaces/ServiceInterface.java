@@ -1,6 +1,5 @@
-package com.workpal.interfaces;
+package com.workpal.repository.interfaces;
 
-import com.workpal.model.Event;
 import com.workpal.model.Service;
 
 import java.sql.SQLException;

@@ -1,6 +1,6 @@
-package com.workpal.repository;
+package com.workpal.repository.implementInterfaces;
 
-import com.workpal.interfaces.UserInterface;
+import com.workpal.repository.interfaces.UserInterface;
 import com.workpal.model.User;
 import com.workpal.util.JdcbConnection;
 

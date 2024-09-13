@@ -1,7 +1,7 @@
 package com.workpal.ui;
 
-import com.workpal.model.Member;
 import com.workpal.model.User;
+import com.workpal.repository.implementInterfaces.SubscriptionRepository;
 import com.workpal.service.AuthService;
 import com.workpal.service.SessionUser;
 

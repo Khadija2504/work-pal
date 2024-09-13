@@ -1,9 +1,8 @@
 package com.workpal.service;
 
 import com.workpal.model.Service;
-import com.workpal.repository.ServiceRepository;
+import com.workpal.repository.implementInterfaces.ServiceRepository;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
