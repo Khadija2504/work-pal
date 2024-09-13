@@ -16,13 +16,20 @@ import java.util.Map;
 
 public class SpacesReservationRepository implements SpacesReservationInterface {
     @Override
-    public void saveReservation(SpaceReservation spaceReservation) throws SQLException {
+    public void saveReservation(SpaceReservation spaceReservation, SpacePayment payment) throws SQLException {
         Connection connection = JdcbConnection.getConnection();
         String query = "INSERT INTO reservations_space (member_id, space_id) VALUES (?, ?) ";
         PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
         statement.setInt(1, spaceReservation.getMember_id());
         statement.setInt(2, spaceReservation.getSpace_id());
         statement.executeUpdate();
+        String sql = "INSERT INTO space_payments (member_id, card_info, space_id, payment_type) VALUES  (?, ?, ?, ?)";
+        PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+        stmt.setInt(1, payment.getMember_id());
+        stmt.setString(2, payment.getCard_info());
+        stmt.setString(4, payment.getPayment_type());
+        stmt.setInt(3, payment.getSpace_id());
+        stmt.executeUpdate();
     }
 
     @Override
@@ -33,8 +40,8 @@ public class SpacesReservationRepository implements SpacesReservationInterface {
         String sql = "SELECT s.id AS space_id, s.name, s.description, s.policies, s.manager_id, s.type, " +
                 "rs.member_id, rs.status " +
                 "FROM spaces s " +
-                "JOIN reservations_space rs ON s.id = rs.space_id , rs.status = 'not_yet'" +
-                "WHERE rs.member_id = ?";
+                "JOIN reservations_space rs ON s.id = rs.space_id " +
+                "WHERE rs.member_id = ? AND rs.status = 'not_yet'";
 
         List<Space> spaces = new ArrayList<>();
         Map<Integer, Space> spaceMap = new HashMap<>();
@@ -54,7 +61,9 @@ public class SpacesReservationRepository implements SpacesReservationInterface {
                                 rs.getString("description"),
                                 rs.getString("policies"),
                                 rs.getInt("manager_id"),
-                                rs.getString("type")
+                                rs.getString("type"),
+                                rs.getInt("price"),
+                                rs.getInt("tail")
                         );
                         spaceMap.put(spaceId, space);
                         spaces.add(space);
@@ -104,7 +113,9 @@ public class SpacesReservationRepository implements SpacesReservationInterface {
                             rs.getString("description"),
                             rs.getString("policies"),
                             rs.getInt("manager_id"),
-                            rs.getString("type")
+                            rs.getString("type"),
+                            rs.getInt("price"),
+                            rs.getInt("tail")
                     ));
                 }
             }

@@ -29,7 +29,7 @@ public class MemberRoleMenu {
                     profileManagementMenu();
                     break;
                 case 2:
-                    ReservationMnagementMenu();
+                    ReservationManagementMenu();
                     break;
                 case 5:
                     displayAllSpaces();
@@ -45,7 +45,7 @@ public class MemberRoleMenu {
         Scanner scanner = new Scanner(System.in);
     }
 
-    public void ReservationMnagementMenu() {
+    public void ReservationManagementMenu() {
         Scanner scanner = new Scanner(System.in);
         while(true) {
             System.out.println("1. Reserve an event");
@@ -62,6 +62,7 @@ public class MemberRoleMenu {
                     break;
                 case 2:
                     spaceReservation();
+                    break;
                 case 5:
                     displayAllReservations();
                     break;
@@ -152,7 +153,8 @@ public class MemberRoleMenu {
                 System.out.println("Name: " + reservation.getName());
                 System.out.println("Description: " + reservation.getDescription());
                 System.out.println("Type: " + reservation.getType());
-                System.out.println("Price: " + reservation.getPolicies() + "$");
+                System.out.println("Price: " + reservation.getPrice() + " $");
+                System.out.println("Tail: " + reservation.getTail() + " m²");
 
                 System.out.println("Reservation status");
                 List<SpaceReservation> spaceReserved = reservation.getSpaceReservations();
@@ -181,6 +183,8 @@ public class MemberRoleMenu {
                 System.out.println("Description: " + space.getDescription());
                 System.out.println("Policies: " + space.getPolicies());
                 System.out.println("Type: " + space.getType());
+                System.out.println("Price " + space.getPrice());
+                System.out.println("Tail " + space.getTail());
                 System.out.println("------------");
             });
         } catch (SQLException e) {
@@ -193,20 +197,24 @@ public class MemberRoleMenu {
         System.out.println("Enter space id from the list ");
         displayAllSpaces();
         int spaceId = scanner.nextInt();
+        System.out.println("Print hello world");
+        String hello = scanner.nextLine();
+        System.out.println("Enter your card infos");
+        String cardInfo = scanner.nextLine();
         User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int memberId = loggedInUser.getId();
 
             try {
-                boolean isAdded = spacesReservationService.addSpaceReservation(memberId, spaceId);
+                boolean isAdded = spacesReservationService.addSpaceReservation(memberId, spaceId, cardInfo);
                 if (isAdded) {
                     System.out.println("Space reservation added successfully! we'll notify you when the manager accept your reservation");
                 } else {
                     System.out.println("Invalid format data");
                 }
             } catch (SQLException e) {
-                System.out.println("Error during addition of the space: " + e.getMessage());
+                System.out.println("Error during addition of the reservation: " + e.getMessage());
             }
         } else {
             System.out.println("No user is currently logged in.");

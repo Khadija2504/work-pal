@@ -8,8 +8,8 @@ import java.util.List;
 
 public class SpaceService {
     private SpaceRepository spaceRepository = new SpaceRepository();
-    public boolean addSpace(String name, String description, String policies, int manager_id, String type) throws SQLException {
-        spaceRepository.saveSpace(new Space(0, name, description, policies, manager_id, type));
+    public boolean addSpace(String name, String description, String policies, int manager_id, String type, int price, int tail) throws SQLException {
+        spaceRepository.saveSpace(new Space(0, name, description, policies, manager_id, type, price, tail));
         return true;
     }
     public List<Space> getAllSpaces() throws SQLException {

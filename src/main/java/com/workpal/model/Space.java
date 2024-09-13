@@ -10,14 +10,18 @@ public class Space {
     private String policies;
     private int manager_id;
     private String type;
+    private int price;
+    private int tail;
     private List<SpaceReservation> spaceReservation;
 
-    public Space(int id, String name, String description, String policies, int manager_id, String type) {
+    public Space(int id, String name, String description, String policies, int manager_id, String type, int price, int tail) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.manager_id = manager_id;
         this.type = type;
+        this.price = price;
+        this.tail = tail;
         this.policies = policies;
         this.spaceReservation = new ArrayList<>();
     }
@@ -57,6 +61,10 @@ public class Space {
     public void setType(String type) {
         this.type = type;
     }
+    public int getPrice() { return price; }
+    public void setPrice(int price) { this.price = price; }
+    public int getTail() { return tail; }
+    public void getTail(int tail) { this.tail = tail; }
     public List<SpaceReservation> getSpaceReservations() {
         return spaceReservation;
     }

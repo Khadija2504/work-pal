@@ -16,13 +16,15 @@ import java.util.List;
 public class SpaceRepository implements SpaceInterface {
     public void saveSpace(Space space) throws SQLException {
         Connection connection = JdcbConnection.getConnection();
-        String query = "INSERT INTO spaces (name, description, manager_id, policies, type) VALUES (?, ?, ?, ?, ?) ";
+        String query = "INSERT INTO spaces (name, description, manager_id, policies, type, price, tail) VALUES (?, ?, ?, ?, ?, ?, ?) ";
         PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
         statement.setString(1, space.getName());
         statement.setString(2, space.getDescription());
         statement.setInt(3, space.getManager_id());
         statement.setString(4, space.getPolicies());
         statement.setString(5, space.getType());
+        statement.setInt(6, space.getPrice());
+        statement.setInt(7, space.getTail());
         statement.executeUpdate();
     }
     public List<Space> getAllSpaces() throws SQLException {
@@ -42,7 +44,9 @@ public class SpaceRepository implements SpaceInterface {
                             rs.getString("description"),
                             rs.getString("policies"),
                             rs.getInt("manager_id"),
-                            rs.getString("type")
+                            rs.getString("type"),
+                            rs.getInt("price"),
+                            rs.getInt("tail")
                     ));
                 }
             }
@@ -93,7 +97,9 @@ public class SpaceRepository implements SpaceInterface {
                         rs.getString("description"),
                         rs.getString("policies"),
                         rs.getInt("manager_id"),
-                        rs.getString("type")
+                        rs.getString("type"),
+                        rs.getInt("price"),
+                        rs.getInt("tail")
                 );
             }
         }

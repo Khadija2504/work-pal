@@ -241,13 +241,17 @@ public class ManagerMenu {
         String policies = scanner.nextLine();
         System.out.println("Enter space type (office, meeting_room)");
         String type = scanner.nextLine();
+        System.out.println("Enter pace price");
+        int price = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter space tail");
+        int tail = Integer.parseInt(scanner.nextLine());
         User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int managerId = loggedInUser.getId();
 
             try {
-                boolean isAdded = spaceService.addSpace(name, description, policies, managerId, type);
+                boolean isAdded = spaceService.addSpace(name, description, policies, managerId, type, price, tail);
                 if (isAdded) {
                     System.out.println("Space " + name + " added successfully!");
                 } else {
@@ -341,6 +345,8 @@ public class ManagerMenu {
                 System.out.println("Description: " + space.getDescription());
                 System.out.println("Policies: " + space.getPolicies());
                 System.out.println("Type: " + space.getType());
+                System.out.println("Price: " + space.getPrice() + "$");
+                System.out.println("Tail: " + space.getTail() + "m²");
                 System.out.println("------------");
             });
         } catch (SQLException e) {
@@ -433,9 +439,13 @@ public class ManagerMenu {
         String policies = scanner.nextLine();
         System.out.println("Enter new space type (office, meeting_room)");
         String type = scanner.nextLine();
+        System.out.println("Enter new space price");
+        int price = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter new space tail");
+        int tail = Integer.parseInt(scanner.nextLine());
 
         try {
-            Space space = new Space(spaceId, name, description, policies, 0, type);
+            Space space = new Space(spaceId, name, description, policies, 0, type, price, tail);
             boolean isUpdated = spaceService.updateSpace(space);
             if (isUpdated) {
                 System.out.println("Space updated successfully!");
