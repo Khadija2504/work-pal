@@ -1,8 +1,6 @@
 package com.workpal.repository.implementInterfaces;
 
-import com.workpal.model.Space;
-import com.workpal.model.SpaceReservation;
-import com.workpal.model.User;
+import com.workpal.model.*;
 import com.workpal.repository.interfaces.SpacesReservationInterface;
 import com.workpal.service.SessionUser;
 import com.workpal.util.JdcbConnection;
@@ -12,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SpacesReservationRepository implements SpacesReservationInterface {
     @Override
@@ -26,9 +26,56 @@ public class SpacesReservationRepository implements SpacesReservationInterface {
     }
 
     @Override
-    public List<SpaceReservation> getAllSpaceReservations() throws SQLException {
-        return List.of();
+    public List<Space> getAllSpaceReservations() throws SQLException {
+        Connection connection = JdcbConnection.getConnection();
+        User loggedInUser = SessionUser.getLoggedInUser();
+
+        String sql = "SELECT s.id AS space_id, s.name, s.description, s.policies, s.manager_id, s.type, " +
+                "rs.member_id, rs.status " +
+                "FROM spaces s " +
+                "JOIN reservations_space rs ON s.id = rs.space_id , rs.status = 'not_yet'" +
+                "WHERE rs.member_id = ?";
+
+        List<Space> spaces = new ArrayList<>();
+        Map<Integer, Space> spaceMap = new HashMap<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, loggedInUser.getId());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int spaceId = rs.getInt("space_id");
+
+                    Space space = spaceMap.get(spaceId);
+                    if (space == null) {
+                        space = new Space(
+                                spaceId,
+                                rs.getString("name"),
+                                rs.getString("description"),
+                                rs.getString("policies"),
+                                rs.getInt("manager_id"),
+                                rs.getString("type")
+                        );
+                        spaceMap.put(spaceId, space);
+                        spaces.add(space);
+                    }
+
+                    SpaceReservation spaceReservation = new SpaceReservation(
+                            loggedInUser.getId(),
+                            rs.getInt("member_id"),
+                            rs.getInt("space_id"),
+                            rs.getString("status")
+                    );
+                    space.getSpaceReservations().add(spaceReservation);
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error fetching spaces with reservations", e);
+        }
+
+        return spaces;
     }
+
 
     @Override
     public boolean updateSpaceReservation(SpaceReservation spaceReservation) throws SQLException {

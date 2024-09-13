@@ -1,5 +1,8 @@
 package com.workpal.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Space {
     private int id;
     private String name;
@@ -7,6 +10,7 @@ public class Space {
     private String policies;
     private int manager_id;
     private String type;
+    private List<SpaceReservation> spaceReservation;
 
     public Space(int id, String name, String description, String policies, int manager_id, String type) {
         this.id = id;
@@ -15,6 +19,7 @@ public class Space {
         this.manager_id = manager_id;
         this.type = type;
         this.policies = policies;
+        this.spaceReservation = new ArrayList<>();
     }
     public int getId() {
         return id;
@@ -51,5 +56,8 @@ public class Space {
     }
     public void setType(String type) {
         this.type = type;
+    }
+    public List<SpaceReservation> getSpaceReservations() {
+        return spaceReservation;
     }
 }

@@ -1,7 +1,6 @@
 package com.workpal.ui;
 
-import com.workpal.model.Space;
-import com.workpal.model.User;
+import com.workpal.model.*;
 import com.workpal.service.SessionUser;
 import com.workpal.service.SpacesReservationService;
 
@@ -9,20 +8,20 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-public class MemberMenu {
+public class MemberRoleMenu {
     private SpacesReservationService spacesReservationService = new SpacesReservationService();
-    public void memberMenu() {
+    public void memberRoleMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to WorkPal");
         while (true) {
-            System.out.println("1. Manage my profile"); // done
+            System.out.println("1. Manage my profile");
             System.out.println("2. Manage reservation");
             System.out.println("3. Manage subscription");
             System.out.println("4. View all events");
             System.out.println("5. View all spaces");
             System.out.println("6. View my notifications");
             System.out.println("7. My favorite spaces");
-            System.out.println("8. Search"); // done
+            System.out.println("8. Search");
             System.out.println("Exit");
             int choice = scanner.nextInt();
             switch (choice) {
@@ -53,6 +52,7 @@ public class MemberMenu {
             System.out.println("2. Reserve a space");
             System.out.println("3. Cancel a reservation event");
             System.out.println("4. Cancel a reservation space");
+            System.out.println("5. View pending reservations ");
             System.out.println("5. My future reservation history");
             System.out.println("6. My past reservation history");
             System.out.println("7. Exit");
@@ -62,6 +62,9 @@ public class MemberMenu {
                     break;
                 case 2:
                     spaceReservation();
+                case 5:
+                    displayAllReservations();
+                    break;
                 case 7:
                     return;
                 default:
@@ -101,7 +104,7 @@ public class MemberMenu {
                     break;
                 case 2:
                     searchEventMenu();
-                break;
+                    break;
                 case 3:
                     return;
                 default:
@@ -118,7 +121,7 @@ public class MemberMenu {
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1:
-                break;
+                    break;
                 default :
                     System.out.println("Invalid option");
             }
@@ -137,6 +140,36 @@ public class MemberMenu {
                 default :
                     System.out.println("Invalid option");
             }
+        }
+    }
+
+    public void displayAllReservations () {
+        try {
+            List<Space> reservations = spacesReservationService.getAllSpaceReservations();
+
+            reservations.forEach(reservation -> {
+                System.out.println("Subscription ID: " + reservation.getId());
+                System.out.println("Name: " + reservation.getName());
+                System.out.println("Description: " + reservation.getDescription());
+                System.out.println("Type: " + reservation.getType());
+                System.out.println("Price: " + reservation.getPolicies() + "$");
+
+                System.out.println("Reservation status");
+                List<SpaceReservation> spaceReserved = reservation.getSpaceReservations();
+                if (spaceReserved.isEmpty()) {
+                    System.out.println("  No reservations associated with this space.");
+                } else {
+                    spaceReserved.forEach(service -> {
+                        System.out.println("  reservation ID: " + service.getId());
+                        System.out.println("  reservation Name: " + service.getStatus());
+                        System.out.println("  --------");
+                    });
+                }
+
+                System.out.println("------------");
+            });
+        } catch (SQLException e) {
+            System.out.println("Error fetching reservations: " + e.getMessage());
         }
     }
     public void displayAllSpaces() {

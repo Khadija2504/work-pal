@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SpacesReservationInterface {
     void saveReservation(SpaceReservation spaceReservation) throws SQLException;
-    List<SpaceReservation> getAllSpaceReservations() throws SQLException;
+    List<Space> getAllSpaceReservations() throws SQLException;
     boolean updateSpaceReservation(SpaceReservation spaceReservation) throws SQLException;
     boolean deleteSpaceReservation(int id) throws SQLException;
     List<Space> getAllSpaces() throws SQLException;

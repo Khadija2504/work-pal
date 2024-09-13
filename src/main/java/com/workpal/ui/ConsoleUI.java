@@ -1,7 +1,6 @@
 package com.workpal.ui;
 
 import com.workpal.model.User;
-import com.workpal.repository.implementInterfaces.SubscriptionRepository;
 import com.workpal.service.AuthService;
 import com.workpal.service.SessionUser;
 
@@ -13,12 +12,12 @@ public class ConsoleUI {
 
     private AuthService authService = new AuthService();
     private User loggedInUser = null;
-    private MemberMenu memberMenu;
+    private MemberRoleMenu memberRoleMenu;
     private ManagerMenu managerMenu;
     private AdminMenu adminMenu;
 
     public ConsoleUI() {
-        this.memberMenu = new MemberMenu();
+        this.memberRoleMenu = new MemberRoleMenu();
         this.managerMenu = new ManagerMenu();
         this.adminMenu = new AdminMenu();
     }
@@ -87,7 +86,7 @@ public class ConsoleUI {
                 if(loggedInUser.getRole().equals("manager")) {
                     managerMenu.managerMenu();
                 } else {
-                    memberMenu.memberMenu();
+                    memberRoleMenu.memberRoleMenu();
                 }
                 }
             else {

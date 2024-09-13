@@ -61,7 +61,4 @@ public class Subscription {
         return services;
     }
 
-    public void addService(Service service) {
-        this.services.add(service);
-    }
 }

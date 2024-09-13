@@ -15,7 +15,7 @@ public class SpacesReservationService {
         spacesReservationRepository.saveReservation(new SpaceReservation( 0, member_id, space_id, "not_yet"));
         return true;
     }
-    public List<SpaceReservation> getAllSpaceReservations() throws SQLException {
+    public List<Space> getAllSpaceReservations() throws SQLException {
         return spacesReservationRepository.getAllSpaceReservations();
     }
 

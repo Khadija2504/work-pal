@@ -2,6 +2,8 @@ package com.workpal.model;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpaceReservation {
     private int id;
@@ -40,4 +42,5 @@ public class SpaceReservation {
     public void setStatus(String status) {
         this.status = status;
     }
+
 }
