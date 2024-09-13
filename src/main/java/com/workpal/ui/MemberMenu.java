@@ -1,8 +1,16 @@
 package com.workpal.ui;
 
+import com.workpal.model.Space;
+import com.workpal.model.User;
+import com.workpal.service.SessionUser;
+import com.workpal.service.SpacesReservationService;
+
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class MemberMenu {
+    private SpacesReservationService spacesReservationService = new SpacesReservationService();
     public void memberMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to WorkPal");
@@ -23,6 +31,9 @@ public class MemberMenu {
                     break;
                 case 2:
                     ReservationMnagementMenu();
+                    break;
+                case 5:
+                    displayAllSpaces();
                     break;
                 case 8:
                     profileManagementMenu();
@@ -49,6 +60,8 @@ public class MemberMenu {
             switch (choice) {
                 case 1:
                     break;
+                case 2:
+                    spaceReservation();
                 case 7:
                     return;
                 default:
@@ -124,6 +137,46 @@ public class MemberMenu {
                 default :
                     System.out.println("Invalid option");
             }
+        }
+    }
+    public void displayAllSpaces() {
+        try {
+            List<Space> spaces = spacesReservationService.getAllSpaces();
+            spaces.forEach(space -> {
+                System.out.println("Space ID: " + space.getId());
+                System.out.println("Name: " + space.getName());
+                System.out.println("Description: " + space.getDescription());
+                System.out.println("Policies: " + space.getPolicies());
+                System.out.println("Type: " + space.getType());
+                System.out.println("------------");
+            });
+        } catch (SQLException e) {
+            System.out.println("Error fetching spaces: " + e.getMessage());
+        }
+    }
+
+    public void spaceReservation() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter space id from the list ");
+        displayAllSpaces();
+        int spaceId = scanner.nextInt();
+        User loggedInUser = SessionUser.getLoggedInUser();
+
+        if (loggedInUser != null) {
+            int memberId = loggedInUser.getId();
+
+            try {
+                boolean isAdded = spacesReservationService.addSpaceReservation(memberId, spaceId);
+                if (isAdded) {
+                    System.out.println("Space reservation added successfully! we'll notify you when the manager accept your reservation");
+                } else {
+                    System.out.println("Invalid format data");
+                }
+            } catch (SQLException e) {
+                System.out.println("Error during addition of the space: " + e.getMessage());
+            }
+        } else {
+            System.out.println("No user is currently logged in.");
         }
     }
 }

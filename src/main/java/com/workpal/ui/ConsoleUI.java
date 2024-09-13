@@ -56,7 +56,7 @@ public class ConsoleUI {
         String address = scanner.nextLine();
         System.out.println("Enter your phone:");
         String phone = scanner.nextLine();
-        System.out.println("Select your role (admin, manager, member):");
+        System.out.println("Select your role (manager, member):");
         String role = scanner.nextLine();
 
         try {
