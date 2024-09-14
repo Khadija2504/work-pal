@@ -12,8 +12,15 @@ import java.sql.SQLException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SpaceRepository implements SpaceInterface {
+    private final List<Space> spaces;
+
+    public SpaceRepository(List<Space> spaces) {
+        this.spaces = spaces;
+    }
+
     public void saveSpace(Space space) throws SQLException {
         Connection connection = JdcbConnection.getConnection();
         String query = "INSERT INTO spaces (name, description, manager_id, policies, type, price, tail) VALUES (?, ?, ?, ?, ?, ?, ?) ";
@@ -27,6 +34,28 @@ public class SpaceRepository implements SpaceInterface {
         statement.setInt(7, space.getTail());
         statement.executeUpdate();
     }
+
+    @Override
+    public List<Space> findByName(String name) {
+        return spaces.stream()
+                .filter(space -> space.getName().equalsIgnoreCase(name))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Space> findByType(String type) {
+        return spaces.stream()
+                .filter(space -> space.getType().equalsIgnoreCase(type))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Space> findByPrice(int price) {
+        return spaces.stream()
+                .filter(space -> space.getPrice() == price)
+                .collect(Collectors.toList());
+    }
+
     public List<Space> getAllSpaces() throws SQLException {
         Connection connection = JdcbConnection.getConnection();
         User loggedInUser = SessionUser.getLoggedInUser();

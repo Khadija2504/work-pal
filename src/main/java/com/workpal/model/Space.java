@@ -2,6 +2,7 @@ package com.workpal.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Space {
     private int id;
@@ -64,8 +65,21 @@ public class Space {
     public int getPrice() { return price; }
     public void setPrice(int price) { this.price = price; }
     public int getTail() { return tail; }
-    public void getTail(int tail) { this.tail = tail; }
+    public void setTail(int tail) { this.tail = tail; }
     public List<SpaceReservation> getSpaceReservations() {
         return spaceReservation;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Space space = (Space) o;
+        return id == space.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

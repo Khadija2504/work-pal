@@ -12,6 +12,19 @@ public class SpaceService {
         spaceRepository.saveSpace(new Space(0, name, description, policies, manager_id, type, price, tail));
         return true;
     }
+
+    public List<Space> searchByName(String name) {
+        return spaceRepository.findByName(name);
+    }
+
+    public List<Space> searchByType(String type) {
+        return spaceRepository.findByType(type);
+    }
+
+    public List<Space> searchByPrice(int price) {
+        return spaceRepository.findByPrice(price);
+    }
+
     public List<Space> getAllSpaces() throws SQLException {
         return spaceRepository.getAllSpaces();
     }

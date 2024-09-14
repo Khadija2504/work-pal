@@ -11,5 +11,8 @@ public interface SpaceInterface {
     boolean updateSpace(Space space) throws SQLException;
     boolean deleteSpace(int id) throws SQLException;
     Space getSpace(int id) throws SQLException;
+    List<Space> findByName(String name);
+    List<Space> findByType(String type);
+    List<Space> findByPrice(int price);
 }
 

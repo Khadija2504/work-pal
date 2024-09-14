@@ -2,6 +2,7 @@ package com.workpal.ui;
 
 import com.workpal.model.*;
 import com.workpal.service.SessionUser;
+import com.workpal.service.SpaceService;
 import com.workpal.service.SpacesReservationService;
 import com.workpal.service.SubsMemberService;
 
@@ -12,6 +13,7 @@ import java.util.Scanner;
 public class MemberRoleMenu {
     private SubsMemberService subsMemberService = new SubsMemberService();
     private SpacesReservationService spacesReservationService = new SpacesReservationService();
+    private SpaceService spaceService = new SpaceService();
     public void memberRoleMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to WorkPal");
@@ -37,7 +39,7 @@ public class MemberRoleMenu {
                     displayAllSpaces();
                     break;
                 case 8:
-                    profileManagementMenu();
+                    start();
                     break;
             }
         }
@@ -335,6 +337,40 @@ public class MemberRoleMenu {
             }
         } catch (SQLException e) {
             System.out.println("Error during deletion of the space: " + e.getMessage());
+        }
+    }
+
+    public void start() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter search type (name/type/price): ");
+        String searchType = scanner.nextLine();
+
+        switch (searchType) {
+            case "name":
+                System.out.println("Enter name: ");
+                String name = scanner.nextLine();
+                List<Space> spacesByName = spaceService.searchByName(name);
+                spacesByName.forEach(System.out::println);
+                break;
+
+            case "type":
+                System.out.println("Enter type (office/meeting room): ");
+                String type = scanner.nextLine();
+                List<Space> spacesByType = spaceService.searchByType(type);
+                spacesByType.forEach(System.out::println);
+                break;
+
+            case "price":
+                System.out.println("Enter price: ");
+                int price = scanner.nextInt();
+                List<Space> spacesByPrice = spaceService.searchByPrice(price);
+                spacesByPrice.forEach(System.out::println);
+                break;
+
+            default:
+                System.out.println("Invalid search type.");
+                break;
         }
     }
 }

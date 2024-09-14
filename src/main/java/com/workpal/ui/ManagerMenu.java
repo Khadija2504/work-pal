@@ -11,11 +11,16 @@ import java.util.Scanner;
 import java.util.List;
 
 public class ManagerMenu {
-    SpaceService spaceService = new SpaceService();
+    private SpaceService spaceService = null;
     EventService eventService = new EventService();
     SubscriptionService subscriptionService = new SubscriptionService();
     EquipmentService equipmentService = new EquipmentService();
     ServiceService serviceService = new ServiceService();
+
+    public ManagerMenu() {
+        this.spaceService = spaceService;
+    }
+
     public void managerMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to WorkPal");
@@ -294,7 +299,7 @@ public class ManagerMenu {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate localDate = LocalDate.parse(dateStr, formatter);
 
-            java.sql.Date sqlDate = Date.valueOf(localDate);
+            Date sqlDate = Date.valueOf(localDate);
 
             try {
                 boolean isAdded = eventService.addEvent(name, description, location, sqlDate, type, policies, places_num, manager_id);
@@ -579,7 +584,7 @@ public class ManagerMenu {
             int manager_id = loggedInUser.getId();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate localDate = LocalDate.parse(dateStr, formatter);
-            java.sql.Date sqlDate = Date.valueOf(localDate);
+            Date sqlDate = Date.valueOf(localDate);
 
             try {
                 Event event = new Event(name, description, location, sqlDate, type, policies, places_num, manager_id, eventId);
