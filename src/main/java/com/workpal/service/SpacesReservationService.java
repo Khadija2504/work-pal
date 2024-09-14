@@ -21,10 +21,6 @@ public class SpacesReservationService {
         return spacesReservationRepository.getAllSpaceReservations();
     }
 
-    public boolean updateReservation(SpaceReservation service) throws SQLException {
-        return spacesReservationRepository.updateSpaceReservation(service);
-    }
-
     public boolean deleteReservation(int id) throws SQLException {
         return spacesReservationRepository.deleteSpaceReservation(id);
     }

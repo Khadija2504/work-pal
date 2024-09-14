@@ -9,17 +9,22 @@ public class Subscription {
     private String description;
     private String type;
     private int price;
+    private int space_id;
     private int manager_id;
     private List<Service> services;
+    private List<SubsMember> subsMembers;
 
-    public Subscription(int id, String name, String description, String type, int price, int manager_id) {
+
+    public Subscription(int id, String name, String description, String type, int price, int space_id, int manager_id) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.type = type;
         this.price = price;
+        this.space_id = space_id;
         this.manager_id = manager_id;
         this.services = new ArrayList<>();
+        this.subsMembers = new ArrayList<>();
     }
     public int getId() {
         return id;
@@ -51,6 +56,8 @@ public class Subscription {
     public void setPrice(int price) {
         this.price = price;
     }
+    public int getSpace_id() {return space_id;}
+    public void setSpace_id(int space_id) {this.space_id = space_id;}
     public int getManager_id() {
         return manager_id;
     }
@@ -59,6 +66,9 @@ public class Subscription {
     }
     public List<Service> getServices() {
         return services;
+    }
+    public List<SubsMember> getSubsMembers() {
+        return subsMembers;
     }
 
 }

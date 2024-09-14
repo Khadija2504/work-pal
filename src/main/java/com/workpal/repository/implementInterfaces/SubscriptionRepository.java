@@ -22,14 +22,15 @@ public class SubscriptionRepository implements SubscriptionInterface {
     @Override
     public void saveSubscription(Subscription subs, SubsService subsService) throws SQLException {
         Connection connection = JdcbConnection.getConnection();
-        String query = "INSERT INTO subscriptions (name, description, type, price, manager_id) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO subscriptions (name, description, type, price, space_id, manager_id) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
 
         statement.setString(1, subs.getName());
         statement.setString(2, subs.getDescription());
         statement.setString(3, subs.getType());
         statement.setInt(4, subs.getPrice());
-        statement.setInt(5, subs.getManager_id());
+        statement.setInt(5, subs.getSpace_id());
+        statement.setInt(6, subs.getManager_id());
         statement.executeUpdate();
 
         ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -52,7 +53,7 @@ public class SubscriptionRepository implements SubscriptionInterface {
         User loggedInUser = SessionUser.getLoggedInUser();
 
         String sql = "SELECT s.id AS subscription_id, s.name AS subscription_name, s.description AS subscription_description, " +
-                "s.type, s.price, s.manager_id, sv.id AS service_id, sv.name AS service_name, sv.description AS service_description " +
+                "s.type, s.price, s.space_id, s.manager_id, sv.id AS service_id, sv.name AS service_name, sv.description AS service_description " +
                 "FROM subscriptions s " +
                 "JOIN subs_services ss ON s.id = ss.subs_id " +
                 "JOIN services sv ON ss.service_id = sv.id " +
@@ -76,6 +77,7 @@ public class SubscriptionRepository implements SubscriptionInterface {
                                 rs.getString("subscription_description"),
                                 rs.getString("type"),
                                 rs.getInt("price"),
+                                rs.getInt("space_id"),
                                 rs.getInt("manager_id")
                         );
                         subscriptionMap.put(subscriptionId, subscription);
@@ -92,8 +94,10 @@ public class SubscriptionRepository implements SubscriptionInterface {
                 }
             }
         } catch (SQLException e) {
-            throw new SQLException("Error fetching subscriptions with services", e);
+            e.printStackTrace();
+            throw new SQLException("Error fetching subscriptions with services: " + e.getMessage(), e);
         }
+
 
         return subscriptions;
     }
@@ -103,13 +107,14 @@ public class SubscriptionRepository implements SubscriptionInterface {
     @Override
     public boolean updateSubscription(Subscription subs) throws SQLException {
         Connection connection = JdcbConnection.getConnection();
-        String sql = "UPDATE subscriptions SET name = ?, description = ?, type = ?, price = ? WHERE id = ?";
+        String sql = "UPDATE subscriptions SET name = ?, description = ?, type = ?, price = ?, space_id = ? WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, subs.getName());
             pstmt.setString(2, subs.getDescription());
             pstmt.setString(3, subs.getType());
             pstmt.setInt(4, subs.getPrice());
-            pstmt.setInt(5, subs.getId());
+            pstmt.setInt(5, subs.getSpace_id());
+            pstmt.setInt(6, subs.getId());
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;

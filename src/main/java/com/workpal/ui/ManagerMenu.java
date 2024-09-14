@@ -211,13 +211,18 @@ public class ManagerMenu {
         System.out.println("Enter a service id from the list");
         displayAllServices();
         int service_id = scanner.nextInt();
+
+        System.out.println("Enter space id from the list: ");
+        displayAllSpaces();
+        int spaceId = scanner.nextInt();
+
         User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int manager_id = loggedInUser.getId();
 
             try {
-                boolean isAdded = subscriptionService.addSubscription(name, description, type, price, manager_id, service_id);
+                boolean isAdded = subscriptionService.addSubscription(name, description, type, price, spaceId, manager_id, service_id);
                 if (isAdded) {
                     System.out.println("Subscription " + name + " added successfully!");
                 } else {
@@ -516,19 +521,22 @@ public class ManagerMenu {
         System.out.println("Edit an event");
         System.out.println("Enter new subscription name");
         String name = scanner.nextLine();
-        System.out.println("Enter event type ('monthly', 'annual', 'weekly')");
+        System.out.println("Enter subscription type ('monthly', 'annual', 'weekly')");
         String type = scanner.nextLine();
         System.out.println("Enter subscription price $");
         int price = Integer.parseInt(scanner.nextLine());
         System.out.println("Enter new subscription description");
         String description = scanner.nextLine();
+        System.out.println("Enter space id from the list: ");
+        displayAllSpaces();
+        int spaceId = scanner.nextInt();
 
         User loggedInUser = SessionUser.getLoggedInUser();
 
         if (loggedInUser != null) {
             int manager_id = loggedInUser.getId();
             try {
-                Subscription subs = new Subscription(eventId, name, description, type, price, manager_id);
+                Subscription subs = new Subscription(eventId, name, description, type, price, spaceId, manager_id);
                 boolean isUpdated = subscriptionService.updateSubscription(subs);
                 if (isUpdated) {
                     System.out.println("Subscription updated successfully!");

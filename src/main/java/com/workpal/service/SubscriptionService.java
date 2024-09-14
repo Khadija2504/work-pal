@@ -11,8 +11,8 @@ import java.util.List;
 public class SubscriptionService {
     SubscriptionRepository subsRepository = new SubscriptionRepository();
     SubscriptionRepository subscriptionRepository = new SubscriptionRepository();
-    public boolean addSubscription(String name, String description, String type, int price, int manager_id, int service_id) throws SQLException {
-        subsRepository.saveSubscription(new Subscription( 0, name, description, type, price, manager_id), new SubsService(0, service_id, manager_id));
+    public boolean addSubscription(String name, String description, String type, int price, int space_id, int manager_id, int service_id) throws SQLException {
+        subsRepository.saveSubscription(new Subscription( 0, name, description, type, price, space_id, manager_id), new SubsService(0, service_id, manager_id));
         return true;
     }
 

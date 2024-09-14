@@ -85,12 +85,6 @@ public class SpacesReservationRepository implements SpacesReservationInterface {
         return spaces;
     }
 
-
-    @Override
-    public boolean updateSpaceReservation(SpaceReservation spaceReservation) throws SQLException {
-        return false;
-    }
-
     @Override
     public boolean deleteSpaceReservation(int id) throws SQLException {
         return false;
