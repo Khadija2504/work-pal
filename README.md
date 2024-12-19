@@ -94,13 +94,13 @@
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-username/workpal.git
-   ```bash
+   ```
 
    Navigate to the project directory:
 
 ```bash
 cd workpal
-```bash
+```
 Build the project:
 
 ```bash
