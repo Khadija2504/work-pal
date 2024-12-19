@@ -91,12 +91,11 @@
 
 ## Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/workpal.git
-   ```
-
-   Navigate to the project directory:
+ Clone the repository:
+ ```bash
+ git clone https://github.com/your-username/workpal.git
+ ```
+Navigate to the project directory:
 
 ```bash
 cd workpal
@@ -105,7 +104,7 @@ Build the project:
 
 ```bash
 mvn clean install
-```bash
+```
 Set up the PostgreSQL database:
 
 Create a new database named workpal_db.
@@ -117,17 +116,19 @@ Update the PostgreSQL connection details:
 spring.datasource.url=jdbc:postgresql://localhost:5432/workpal_db
 spring.datasource.username=your_username
 spring.datasource.password=your_password
+```
 Run the application:
 
 ```bash
 mvn spring-boot:run
-```bash
+```
 
 conception uml link
 ```link
 https://drive.google.com/file/d/14vl1HoZ-mESLsmEFxnK0nw12sO-ZJbgd/view?usp=sharing
-```link
+```
 jira link
 
+```link
 https://khadja-ourraiss.atlassian.net/jira/software/projects/WOR/boards/2?sprintStarted=true&sprints=2
 
